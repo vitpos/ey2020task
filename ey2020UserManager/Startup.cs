@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace ey2020UserManager
 {
@@ -26,6 +27,16 @@ namespace ey2020UserManager
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
+
+			services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new OpenApiInfo
+				{
+					Version = "v1",
+					Title = "User management API",
+					Description = "Current task should give possibility to manage Users and Roles."
+				});
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,11 +47,18 @@ namespace ey2020UserManager
 				app.UseDeveloperExceptionPage();
 			}
 
+			app.UseSwagger();
+
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+			});
+
 			app.UseHttpsRedirection();
 
 			app.UseRouting();
 
-			app.UseAuthorization();
+			// app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
