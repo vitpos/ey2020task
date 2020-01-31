@@ -1,3 +1,8 @@
 .vs/
 ey2020UserManager/bin/
 ey2020UserManager/obj/
+ey2020UserManager.Infrustructure/bin/Debug/netcoreapp3.1/ey2020UserManager.Infrustructure.deps.json
+ey2020UserManager.Infrustructure/bin/
+ey2020UserManager.Infrustructure/obj/
+ey2020UserManager.Persistence/bin/
+ey2020UserManager.Persistence/obj/
