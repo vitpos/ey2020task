@@ -10,5 +10,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ey2020UserManager.Infrustructure\ey2020UserManager.Infrustructure.csproj" />
+    <ProjectReference Include="..\ey2020UserManager.Persistence\ey2020UserManager.Persistence.csproj" />
+  </ItemGroup>
+
 
 </Project>
