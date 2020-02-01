@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ey2020UserManager.Persistence;
+using ey2020UserManager.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,7 +31,9 @@ namespace ey2020UserManager
 		{
 			services.AddControllers();
 
-			services.AddDbContext<UserRoleManagerDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("ConnectionStrings")));
+			services.AddDbContext<UserRoleManagerDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("URManagementConnection")));
+
+			services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
 			services.AddSwaggerGen(c =>
 			{

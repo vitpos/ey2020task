@@ -8,7 +8,8 @@ namespace ey2020UserManager.Persistence
 {
 	public class UserRoleManagerDbContext : DbContext
 	{
-		public UserRoleManagerDbContext(DbContextOptions options) :base(options)
+		public UserRoleManagerDbContext(DbContextOptions options)
+			:base(options)
 		{
 		}
 
