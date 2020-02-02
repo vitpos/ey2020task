@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ey2020UserManager.Infrustructure.RoleService;
+using ey2020UserManager.Persistence.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,36 +13,62 @@ namespace ey2020UserManager.API.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
-        // GET: api/Role
+        private readonly IRoleService _roleService;
+
+        public RoleController(IRoleService roleService)
+        {
+            _roleService = roleService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<Role>> GetRoles()
         {
-            return new string[] { "value1", "value2" };
+            var roles = _roleService.GetAllRoles() ?? Enumerable.Empty<Role>();
+
+            return Ok(roles);
+
         }
 
-        // GET: api/Role/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Role>> GetRoleById(int id)
         {
-            return "value";
+            var role = await _roleService.GetRoleByIdAsync(id);
+
+            if(role == null)
+            {
+                return BadRequest($"Entity with {id} not found.");
+            }
+
+            return Ok(role);
         }
 
-        // POST: api/Role
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Role entity)
         {
+            await _roleService.CreateRoleAsync(entity);
+            return Ok();
         }
 
-        // PUT: api/Role/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Role entity)
         {
+            var role = new Role()
+            {
+                Id = entity.Id,
+                RoleName = entity.RoleName,
+                IsActive = entity.IsActive
+            };
+
+            await _roleService.UpdateRoleAsync(role);
+            return Ok();
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _roleService.DeleteRoleAsync(id);
+            return Ok();
         }
     }
 }

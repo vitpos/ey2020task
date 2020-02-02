@@ -9,7 +9,7 @@ using ey2020UserManager.Persistence;
 namespace ey2020UserManager.Persistence.Migrations
 {
     [DbContext(typeof(UserRoleManagerDbContext))]
-    [Migration("20200201214851_Init")]
+    [Migration("20200202205712_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,11 +30,14 @@ namespace ey2020UserManager.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("RoleKey")
+                    b.Property<string>("RoleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.ToTable("Roles");
                 });
@@ -64,6 +67,9 @@ namespace ey2020UserManager.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

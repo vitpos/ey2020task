@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ey2020UserManager.API.Controllers
 {
-    [Route("api")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -21,7 +21,6 @@ namespace ey2020UserManager.API.Controllers
         }
 
         [HttpGet]
-        [Route("users")]
         public IActionResult GetAllUsers()
         {
             var users = _userService.GetAllUser();
@@ -29,7 +28,7 @@ namespace ey2020UserManager.API.Controllers
         }
 
         [HttpGet]
-        [Route("users/{id}")]
+        [Route("{id}")]
         public async Task<ActionResult<User>> GetUserDetails(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -43,7 +42,6 @@ namespace ey2020UserManager.API.Controllers
         }
 
         [HttpPost]
-        [Route("user")]
         public async Task<ActionResult> Post([FromBody] User item)
         {
             await _userService.CreateUserAsync(item);

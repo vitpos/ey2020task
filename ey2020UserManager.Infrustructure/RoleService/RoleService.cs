@@ -1,4 +1,5 @@
 ﻿using ey2020UserManager.Persistence.Model;
+using ey2020UserManager.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,10 +9,35 @@ namespace ey2020UserManager.Infrustructure.RoleService
 {
 	public class RoleService : IRoleService
 	{
-		public Task<bool> CreateRoleAsync(int id) => throw new NotImplementedException();
-		public Task<bool> DeleteRoleAsync(int id) => throw new NotImplementedException();
-		public IEnumerable<Role> GetAllRoles() => throw new NotImplementedException();
-		public Task<Role> GetRoleByIdAsync() => throw new NotImplementedException();
-		public Task<bool> UpdateRoleAsync(int id) => throw new NotImplementedException();
+		private readonly IRepository<Role> _repository;
+
+		public RoleService(IRepository<Role> repository)
+		{
+			_repository = repository;
+		}
+
+		public async Task CreateRoleAsync(Role entity)
+			=> await _repository.AddNewAsync(entity);
+
+		public async Task DeleteRoleAsync(int id)
+		{
+			var role = await _repository.GetByIdAsync(id);
+
+			if(role == null)
+			{
+				return;
+			}
+
+			await _repository.DeleteAsync(role);
+		}
+		
+		public IEnumerable<Role> GetAllRoles() 
+			=> _repository.GetAll();
+
+		public Task<Role> GetRoleByIdAsync(int id)
+			=> _repository.GetByIdAsync(id);
+
+		public async Task UpdateRoleAsync(Role entity)
+			=> await _repository.UpdateAsync(entity);
 	}
 }
