@@ -12,7 +12,7 @@ namespace ey2020UserManager.Persistence.Model
 		public int Id { get; set; }
 
 		[Required]
-		public string RoleKey { get; set; }
+		public string RoleName { get; set; }
 
 		[Required]
 		public bool IsActive { get; set; }
