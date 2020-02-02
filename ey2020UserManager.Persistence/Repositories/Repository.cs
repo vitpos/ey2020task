@@ -17,32 +17,26 @@ namespace ey2020UserManager.Persistence.Repositories
 			_dbContext = dbContext;
 		}
 
-		public async Task<T> GetByIdAsync(int id) => await _dbContext.FindAsync<T>();
+		public async Task<T> GetByIdAsync(int id) => await _dbContext.FindAsync<T>(id);
 
 		public IEnumerable<T> GetAll() => _dbContext.Set<T>().AsNoTracking();
 
-		public async Task<bool> AddNewAsync(T entity)
+		public async Task AddNewAsync(T entity)
 		{
-			var item = await _dbContext.AddAsync<T>(entity);
+			await _dbContext.AddAsync(entity);
 			await _dbContext.SaveChangesAsync();
-
-			return item.State == EntityState.Added;
 		}
 		
-		public async Task<bool> DeleteAsync(T entity)
+		public async Task DeleteAsync(T entity)
 		{
-			var item = _dbContext.Remove<T>(entity);
+			_dbContext.Remove(entity);
 			await _dbContext.SaveChangesAsync();
-
-			return item.State == EntityState.Deleted;
 		}
 
-		public async Task<bool> UpdateAsync(T entity)
+		public async Task UpdateAsync(T entity)
 		{
-			var item = _dbContext.Update(entity);
+			_dbContext.Update(entity);
 			await _dbContext.SaveChangesAsync();
-
-			return item.State == EntityState.Modified;
 		}
 	}
 }

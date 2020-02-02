@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ey2020UserManager.Infrustructure.RoleService;
+using ey2020UserManager.Infrustructure.UserService;
 using ey2020UserManager.Persistence;
 using ey2020UserManager.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -33,7 +35,10 @@ namespace ey2020UserManager
 
 			services.AddDbContext<UserRoleManagerDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("URManagementConnection")));
 
-			services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+			services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IRoleService, RoleService>();
 
 			services.AddSwaggerGen(c =>
 			{
