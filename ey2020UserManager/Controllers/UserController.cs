@@ -2,45 +2,75 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ey2020UserManager.Infrustructure.UserService;
+using ey2020UserManager.Persistence.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ey2020UserManager.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        // GET: api/User
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("users")]
+        public IActionResult GetAllUsers()
         {
-            return new string[] { "value1", "value2" };
+            var users = _userService.GetAllUser();
+            return Ok(users);
         }
 
-        // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("users/{id}")]
+        public async Task<ActionResult<User>> GetUserDetails(int id)
         {
-            return "value";
+            var user = await _userService.GetUserByIdAsync(id);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
-        // POST: api/User
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("user")]
+        public async Task<ActionResult> Post([FromBody] User item)
         {
+            await _userService.CreateUserAsync(item);
+            return Ok();
         }
 
-        // PUT: api/User/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] User item)
         {
+            var user = new User() {
+                Id = id,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                Email = item.Email,
+                PhoneNumber = item.PhoneNumber,
+                IsEnabled = item.IsEnabled
+            };
+
+            await _userService.UpdateUserAsync(user);
+            return Ok();
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _userService.DeleteUserAsync(id);
+            return Ok();
         }
     }
 }

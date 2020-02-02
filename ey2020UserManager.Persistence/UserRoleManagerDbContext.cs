@@ -15,5 +15,14 @@ namespace ey2020UserManager.Persistence
 
 		DbSet<User> Users { get; set; }
 		DbSet<Role> Roles { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			base.OnModelCreating(builder);
+
+			builder.Entity<User>().HasIndex(e => e.Id).IsUnique();
+
+			builder.Entity<Role>().HasIndex(e => e.Id).IsUnique();
+		}
 	}
 }

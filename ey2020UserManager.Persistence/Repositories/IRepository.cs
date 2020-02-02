@@ -11,8 +11,8 @@ namespace ey2020UserManager.Persistence.Repositories
 	{
 		Task<T> GetByIdAsync(int id);
 		IEnumerable<T> GetAll();
-		Task<bool> AddNewAsync(T entity);
-		Task<bool> UpdateAsync(T entity);
-		Task<bool> DeleteAsync(T entity);
+		Task AddNewAsync(T entity);
+		Task UpdateAsync(T entity);
+		Task DeleteAsync(T entity);
 	}
 }
