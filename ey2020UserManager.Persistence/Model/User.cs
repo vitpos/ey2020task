@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ey2020UserManager.Persistence.Model
@@ -21,5 +22,7 @@ namespace ey2020UserManager.Persistence.Model
 
 		[Required]
 		public bool IsEnabled { get; set; }
+
+		public IEnumerable<UserAuthorization> LinkedRoles { get; set; }
 	}
 }

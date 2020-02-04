@@ -21,10 +21,11 @@ namespace ey2020UserManager.Persistence.Repositories
 
 		public IEnumerable<T> GetAll() => _dbContext.Set<T>().AsNoTracking();
 
-		public async Task AddNewAsync(T entity)
+		public async Task<T> AddNewAsync(T entity)
 		{
-			await _dbContext.AddAsync(entity);
+			var item = await _dbContext.AddAsync(entity);
 			await _dbContext.SaveChangesAsync();
+			return item.Entity;
 		}
 		
 		public async Task DeleteAsync(T entity)
@@ -33,10 +34,12 @@ namespace ey2020UserManager.Persistence.Repositories
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(T entity)
+		public async Task<T> UpdateAsync(T entity)
 		{
-			_dbContext.Update(entity);
+			var item = _dbContext.Update(entity);
 			await _dbContext.SaveChangesAsync();
+
+			return item.Entity;
 		}
 	}
 }
