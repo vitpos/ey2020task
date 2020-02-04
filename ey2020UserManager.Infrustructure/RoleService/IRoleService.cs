@@ -10,8 +10,8 @@ namespace ey2020UserManager.Infrustructure.RoleService
 	{
 		IEnumerable<Role> GetAllRoles();
 		Task<Role> GetRoleByIdAsync(int id);
-		Task UpdateRoleAsync(Role id);
+		Task<int> UpdateRoleAsync(Role id);
 		Task DeleteRoleAsync(int id);
-		Task CreateRoleAsync(Role entity);
+		Task<int> CreateRoleAsync(Role entity);
 	}
 }

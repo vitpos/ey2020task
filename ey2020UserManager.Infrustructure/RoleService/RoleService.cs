@@ -2,6 +2,7 @@
 using ey2020UserManager.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,8 +17,11 @@ namespace ey2020UserManager.Infrustructure.RoleService
 			_repository = repository;
 		}
 
-		public async Task CreateRoleAsync(Role entity)
-			=> await _repository.AddNewAsync(entity);
+		public async Task<int> CreateRoleAsync(Role entity)
+		{
+			var role = await _repository.AddNewAsync(entity);
+			return role.Id;
+		}
 
 		public async Task DeleteRoleAsync(int id)
 		{
@@ -31,13 +35,16 @@ namespace ey2020UserManager.Infrustructure.RoleService
 			await _repository.DeleteAsync(role);
 		}
 		
-		public IEnumerable<Role> GetAllRoles() 
-			=> _repository.GetAll();
+		public IEnumerable<Role> GetAllRoles()
+			=> _repository.GetAll() ?? Enumerable.Empty<Role>();
 
 		public Task<Role> GetRoleByIdAsync(int id)
 			=> _repository.GetByIdAsync(id);
 
-		public async Task UpdateRoleAsync(Role entity)
-			=> await _repository.UpdateAsync(entity);
+		public async Task<int> UpdateRoleAsync(Role entity)
+		{
+			var role = await _repository.UpdateAsync(entity);
+			return role.Id;
+		}
 	}
 }

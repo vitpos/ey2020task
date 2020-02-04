@@ -1,7 +1,9 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ey2020UserManager.API.Mapper;
 using ey2020UserManager.Infrustructure.RoleService;
 using ey2020UserManager.Infrustructure.UserService;
 using ey2020UserManager.Persistence;
@@ -35,10 +37,18 @@ namespace ey2020UserManager
 
 			services.AddDbContext<UserRoleManagerDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("URManagementConnection")));
 
+			services.AddAutoMapper(typeof(ApiMappingProfile));
+
 			services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IRoleService, RoleService>();
+
+			services.AddApiVersioning(o => {
+				o.ReportApiVersions = true;
+				o.AssumeDefaultVersionWhenUnspecified = true;
+				o.DefaultApiVersion = new ApiVersion(1, 0);
+			});
 
 			services.AddSwaggerGen(c =>
 			{

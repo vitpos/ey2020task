@@ -10,8 +10,8 @@ namespace ey2020UserManager.Infrustructure.UserService
 	{
 		IEnumerable<User> GetAllUser();
 		Task<User> GetUserByIdAsync(int id);
-		Task UpdateUserAsync(User id);
+		Task<int> UpdateUserAsync(User id);
 		Task DeleteUserAsync(int id);
-		Task CreateUserAsync(User entity);
+		Task<int> CreateUserAsync(User entity);
 	}
 }

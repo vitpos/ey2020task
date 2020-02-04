@@ -15,6 +15,8 @@ namespace ey2020UserManager.Persistence.Model
 		public string RoleName { get; set; }
 
 		[Required]
-		public bool IsActive { get; set; }
+		public bool IsEnabled { get; set; }
+
+		public IEnumerable<UserAuthorization> LinkedUsers { get; set; }
 	}
 }
