@@ -34,9 +34,12 @@ namespace ey2020UserManager.Infrustructure.RoleService
 
 			await _repository.DeleteAsync(role);
 		}
-		
-		public IEnumerable<Role> GetAllRoles()
-			=> _repository.GetAll() ?? Enumerable.Empty<Role>();
+
+		public IEnumerable<Role> GetAllRoles(int page = 0, int size = 10)
+		{
+			var (items, total) = _repository.GetAll(page, size);
+			return items ?? Enumerable.Empty<Role>();
+		}
 
 		public async Task<Role> GetRoleByIdAsync(int id)
 			=> await _repository.GetByIdAsync(id);

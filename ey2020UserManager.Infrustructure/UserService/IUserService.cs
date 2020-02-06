@@ -8,7 +8,7 @@ namespace ey2020UserManager.Infrustructure.UserService
 {
 	public interface IUserService
 	{
-		IEnumerable<User> GetAllUser();
+		(IEnumerable<User> items, int total) GetAllUser(int page = 1, int size = 10);
 		User GetUserById(int id);
 		Task<int> UpdateUserAsync(User id);
 		Task DeleteUserAsync(int id);

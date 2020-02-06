@@ -35,8 +35,8 @@ namespace ey2020UserManager.Infrustructure.UserService
 			await _repository.DeleteAsync(userToDelete);
 		}
 
-		public IEnumerable<User> GetAllUser()
-			=> _repository.GetAll() ?? Enumerable.Empty<User>();
+		public (IEnumerable<User> items, int total) GetAllUser(int page = 0, int size = 10)
+			=> _repository.GetAll(page, size);
 
 		public User GetUserById(int id)
 			=> _repository.GetByPredicate(item => item.Id == id, new[] { "LinkedRoles.Role" });
