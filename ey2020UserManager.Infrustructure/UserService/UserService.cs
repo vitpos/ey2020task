@@ -45,7 +45,7 @@ namespace ey2020UserManager.Infrustructure.UserService
 		{
 			var existedUser = await _repository.GetByIdAsync(entity.Id);
 
-			if (existedUser == null && entity.Id <= 0)
+			if (existedUser == null && entity.Id > 0)
 			{
 				throw new ArgumentException("User doesn't exists in database.");
 			}

@@ -19,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ey2020UserManager.Infrustructure.UserAuthService;
+using ey2020UserManager.API.Middleware;
 
 namespace ey2020UserManager
 {
@@ -83,7 +84,7 @@ namespace ey2020UserManager
 
 			app.UseRouting();
 
-			// app.UseAuthorization();
+			app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
 			app.UseEndpoints(endpoints =>
 			{
