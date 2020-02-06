@@ -29,7 +29,7 @@ namespace ey2020UserManager.Infrustructure.RoleService
 
 			if(role == null)
 			{
-				return;
+				throw new ArgumentException("Role doesn't exists in database");
 			}
 
 			await _repository.DeleteAsync(role);
@@ -43,6 +43,12 @@ namespace ey2020UserManager.Infrustructure.RoleService
 
 		public async Task<int> UpdateRoleAsync(Role entity)
 		{
+			var roleToUpdate = await _repository.GetByIdAsync(entity.Id);
+			if(roleToUpdate == null && entity.Id > 0)
+			{
+				throw new ArgumentException("Role doesn't exists in database.");
+			}
+
 			var role = await _repository.UpdateAsync(entity);
 			return role.Id;
 		}

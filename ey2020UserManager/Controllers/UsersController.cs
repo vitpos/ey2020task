@@ -13,96 +13,75 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ey2020UserManager.API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [ApiVersion(ApiConfiguration.ApiVersion)]
-    public class UsersController : ControllerBase
-    {
-        private readonly IUserService _userService;
-        private readonly IUserAuthService _userAuthService;
-        private readonly IMapper _mapper;
+	[ApiController]
+	[Route("api/[controller]")]
+	[ApiVersion(ApiConfiguration.ApiVersion)]
+	public class UsersController : ControllerBase
+	{
+		private readonly IUserService _userService;
+		private readonly IUserAuthService _userAuthService;
+		private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IUserAuthService userAuthService, IMapper mapper)
-        {
-            _userService = userService;
-            _userAuthService = userAuthService;
-            _mapper = mapper;
-        }
+		public UsersController(IUserService userService, IUserAuthService userAuthService, IMapper mapper)
+		{
+			_userService = userService;
+			_userAuthService = userAuthService;
+			_mapper = mapper;
+		}
 
-        [HttpGet]
-        public ActionResult<UserDto> GetAllUsers()
-        {
-            var users = _userService.GetAllUser();
-            return Ok(_mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users));
-        }
+		[HttpGet]
+		public ActionResult<UserDto> GetAllUsers()
+		{
+			var users = _userService.GetAllUser();
+			return Ok(_mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users));
+		}
 
-        [HttpGet]
-        [Route("{userId}")]
-        public async Task<ActionResult<UserDetailsDto>> GetUserDetails(int userId)
-        {
-            var user = _userService.GetUserById(userId);
+		[HttpGet]
+		[Route("{userId}")]
+		public ActionResult<UserDetailsDto> GetUserDetails(int userId)
+		{
+			var user = _userService.GetUserById(userId);
 
-            if(user == null)
-            {
-                return NotFound();
-            }
+			if (user == null)
+			{
+				return NotFound();
+			}
 
-            return Ok(_mapper.Map<User, UserDetailsDto>(user));
-        }
+			return Ok(_mapper.Map<User, UserDetailsDto>(user));
+		}
 
-        [HttpPost]
-        public async Task<ActionResult<int>> CreateNewUser([FromBody] UserEntityDto item)
-        {
-            var user = _mapper.Map<UserEntityDto, User>(item);
-            var userId = await _userService.CreateUserAsync(user);
+		[HttpPost]
+		public async Task<ActionResult<int>> CreateNewUser([FromBody] UserEntityDto item)
+		{
+			var user = _mapper.Map<UserEntityDto, User>(item);
+			var userId = await _userService.CreateUserAsync(user);
 
-            return Ok(userId);
-        }
+			return Ok(userId);
+		}
 
-        [HttpPut("{userId}")]
-        public async Task<ActionResult<int>> UpdateUser(int userId, [FromBody] UserEntityDto item)
-        {
-            try
-            {
-                var user = _mapper.Map<UserEntityDto, User>(item);
-                user.Id = userId;
+		[HttpPut("{userId}")]
+		public async Task<ActionResult<int>> UpdateUser(int userId, [FromBody] UserEntityDto item)
+		{
+			var user = _mapper.Map<UserEntityDto, User>(item);
+			user.Id = userId;
 
-                var updatedUserId = await _userService.UpdateUserAsync(user);
-                return Ok(updatedUserId);
-            }
-            catch (Exception ex) when (ex is ArgumentException)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+			var updatedUserId = await _userService.UpdateUserAsync(user);
+			return Ok(updatedUserId);
+		}
 
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteUser(int userId)
-        {
-            try
-            {
-                await _userService.DeleteUserAsync(userId);
-                return NoContent();
-            }
-            catch (Exception ex) when (ex is ArgumentException)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+		[HttpDelete("{userId}")]
+		public async Task<IActionResult> DeleteUser(int userId)
+		{
+			await _userService.DeleteUserAsync(userId);
+			return NoContent();
+		}
 
-        [HttpPost("{userId}/roles")]
-        public async Task<ActionResult> LinkedUnlinkedRoleToUser(int userId, [FromBody] int[] roles)
-        {
-            try
-            {
-                await _userAuthService.UpdateUserAuthAsync(userId, roles);
-            }
-            catch (Exception ex) when (ex is ArgumentException)
-            {
-                return BadRequest(ex.Message);
-            }
-            
-            return Ok();
-        }
-    }
+		[HttpPost("{userId}/roles")]
+		public async Task<ActionResult> LinkedUnlinkedRoleToUser(int userId, [FromBody] int[] roles)
+		{
+			await _userAuthService.UpdateUserAuthAsync(userId, roles);
+
+			return Ok();
+		}
+	}
 }
