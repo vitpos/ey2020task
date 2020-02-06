@@ -27,20 +27,30 @@ namespace ey2020UserManager.Infrustructure.UserService
 		{
 			var userToDelete = await _repository.GetByIdAsync(id);
 
-			// TODO: Should throw an exception "Entity is not exists. Bad request"
+			if (userToDelete == null)
+			{
+				throw new ArgumentException("User doesn't exists in database.");
+			}
+
 			await _repository.DeleteAsync(userToDelete);
 		}
 
 		public IEnumerable<User> GetAllUser()
 			=> _repository.GetAll() ?? Enumerable.Empty<User>();
 
-		public async Task<User> GetUserByIdAsync(int id)
-			=> await _repository.GetByIdAsync(id);
+		public User GetUserById(int id)
+			=> _repository.GetByPredicate(item => item.Id == id, new[] { "LinkedRoles.Role" });
 
 		public async Task<int> UpdateUserAsync(User entity)
 		{
-			var user = await _repository.UpdateAsync(entity);
-			return user.Id;
+			var existedUser = await _repository.GetByIdAsync(entity.Id);
+
+			if (existedUser == null && entity.Id <= 0)
+			{
+				throw new ArgumentException("User doesn't exists in database.");
+			}
+
+			return (await _repository.UpdateAsync(entity)).Id;
 		}
 	}
 }

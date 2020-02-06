@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,19 @@ namespace ey2020UserManager.Persistence.Repositories
 			_dbContext = dbContext;
 		}
 
-		public async Task<T> GetByIdAsync(int id) => await _dbContext.FindAsync<T>(id);
+		public async Task<T> GetByIdAsync(int id) => await _dbContext.Set<T>().FindAsync(id);
+
+		public T GetByPredicate(Func<T, bool> predicate, string[] includes)
+		{
+			var item = _dbContext.Set<T>().AsNoTracking();
+
+			foreach (var include in includes)
+			{
+				item = item.Include(include);
+			}
+
+			return item.FirstOrDefault(predicate);
+		}
 
 		public IEnumerable<T> GetAll() => _dbContext.Set<T>().AsNoTracking();
 

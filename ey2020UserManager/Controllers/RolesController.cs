@@ -49,16 +49,16 @@ namespace ey2020UserManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateNewRole([FromBody] RoleDto item)
+        public async Task<ActionResult<int>> CreateNewRole([FromBody] RoleEntityDto item)
         {
-            var roleId = await _roleService.CreateRoleAsync(_mapper.Map<RoleDto, Role>(item));
+            var roleId = await _roleService.CreateRoleAsync(_mapper.Map<RoleEntityDto, Role>(item));
             return Ok(roleId);
         }
 
         [HttpPut("{roleId}")]
-        public async Task<ActionResult<int>> Put(int roleId, [FromBody] RoleDto item)
+        public async Task<ActionResult<int>> Put(int roleId, [FromBody] RoleEntityDto item)
         {
-            var role = _mapper.Map<RoleDto, Role>(item);
+            var role = _mapper.Map<RoleEntityDto, Role>(item);
             role.Id = roleId;
 
             return Ok(await _roleService.UpdateRoleAsync(role));

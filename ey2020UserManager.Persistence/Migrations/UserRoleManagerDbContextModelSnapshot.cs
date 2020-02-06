@@ -66,8 +66,8 @@ namespace ey2020UserManager.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
 
                     b.HasKey("Id");
 
@@ -91,6 +91,9 @@ namespace ey2020UserManager.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 

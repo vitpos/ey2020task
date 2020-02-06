@@ -9,7 +9,7 @@ using ey2020UserManager.Persistence;
 namespace ey2020UserManager.Persistence.Migrations
 {
     [DbContext(typeof(UserRoleManagerDbContext))]
-    [Migration("20200204200407_Init")]
+    [Migration("20200206150010_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,8 +68,8 @@ namespace ey2020UserManager.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
 
                     b.HasKey("Id");
 
@@ -93,6 +93,9 @@ namespace ey2020UserManager.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
