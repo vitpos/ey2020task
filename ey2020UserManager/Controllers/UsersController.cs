@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ey2020UserManager.API.Configuration;
 using ey2020UserManager.API.Model;
+using ey2020UserManager.Infrustructure.UserAuthService;
 using ey2020UserManager.Infrustructure.UserService;
 using ey2020UserManager.Persistence.Model;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +19,13 @@ namespace ey2020UserManager.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserAuthService _userAuthService;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserService userService, IUserAuthService userAuthService, IMapper mapper)
         {
             _userService = userService;
+            _userAuthService = userAuthService;
             _mapper = mapper;
         }
 
@@ -35,42 +38,71 @@ namespace ey2020UserManager.API.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        public async Task<ActionResult<UserDto>> GetUserDetails(int userId)
+        public async Task<ActionResult<UserDetailsDto>> GetUserDetails(int userId)
         {
-            var user = await _userService.GetUserByIdAsync(userId);
+            var user = _userService.GetUserById(userId);
 
             if(user == null)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<User, UserDto>(user));
+            return Ok(_mapper.Map<User, UserDetailsDto>(user));
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateNewUser([FromBody] UserDto item)
+        public async Task<ActionResult<int>> CreateNewUser([FromBody] UserEntityDto item)
         {
-            var user = _mapper.Map<UserDto, User>(item);
-
+            var user = _mapper.Map<UserEntityDto, User>(item);
             var userId = await _userService.CreateUserAsync(user);
 
             return Ok(userId);
         }
 
         [HttpPut("{userId}")]
-        public async Task<ActionResult<int>> Put(int userId, [FromBody] UserDto item)
+        public async Task<ActionResult<int>> UpdateUser(int userId, [FromBody] UserEntityDto item)
         {
-            var user = _mapper.Map<UserDto, User>(item);
-            user.Id = userId;
+            try
+            {
+                var user = _mapper.Map<UserEntityDto, User>(item);
+                user.Id = userId;
 
-            return Ok(await _userService.UpdateUserAsync(user));
+                var updatedUserId = await _userService.UpdateUserAsync(user);
+                return Ok(updatedUserId);
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{userId}")]
-        public async Task<IActionResult> Delete(int userId)
+        public async Task<IActionResult> DeleteUser(int userId)
         {
-            await _userService.DeleteUserAsync(userId);
-            return NoContent();
+            try
+            {
+                await _userService.DeleteUserAsync(userId);
+                return NoContent();
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{userId}/roles")]
+        public async Task<ActionResult> LinkedUnlinkedRoleToUser(int userId, [FromBody] int[] roles)
+        {
+            try
+            {
+                await _userAuthService.UpdateUserAuthAsync(userId, roles);
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            return Ok();
         }
     }
 }

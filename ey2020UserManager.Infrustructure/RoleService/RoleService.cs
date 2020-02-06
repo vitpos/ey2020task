@@ -38,8 +38,8 @@ namespace ey2020UserManager.Infrustructure.RoleService
 		public IEnumerable<Role> GetAllRoles()
 			=> _repository.GetAll() ?? Enumerable.Empty<Role>();
 
-		public Task<Role> GetRoleByIdAsync(int id)
-			=> _repository.GetByIdAsync(id);
+		public async Task<Role> GetRoleByIdAsync(int id)
+			=> await _repository.GetByIdAsync(id);
 
 		public async Task<int> UpdateRoleAsync(Role entity)
 		{

@@ -10,5 +10,6 @@ namespace ey2020UserManager.API.Configuration
 		public const string ApiVersion = "1.0";
 		public const int NameStringLength = 128;
 		public const int EmailStringLength = 254;
+		public const int PhoneStringLength = 16;
 	}
 }

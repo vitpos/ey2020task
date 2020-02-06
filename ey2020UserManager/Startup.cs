@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ey2020UserManager.Infrustructure.UserAuthService;
 
 namespace ey2020UserManager
 {
@@ -40,9 +41,11 @@ namespace ey2020UserManager
 			services.AddAutoMapper(typeof(ApiMappingProfile));
 
 			services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
+			services.AddScoped<IUserAuthorizationRepository, UserAuthorizationRepository>();
+			
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IRoleService, RoleService>();
+			services.AddScoped<IUserAuthService, UserAuthService>();
 
 			services.AddApiVersioning(o => {
 				o.ReportApiVersions = true;

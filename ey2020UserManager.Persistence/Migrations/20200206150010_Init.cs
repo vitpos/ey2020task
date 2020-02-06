@@ -29,7 +29,7 @@ namespace ey2020UserManager.Persistence.Migrations
                     FirstName = table.Column<string>(maxLength: 256, nullable: false),
                     LastName = table.Column<string>(maxLength: 256, nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
-                    PhoneNumber = table.Column<string>(maxLength: 256, nullable: true),
+                    PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
                     IsEnabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -66,6 +66,12 @@ namespace ey2020UserManager.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Roles_Id",
                 table: "Roles",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAuthorizations_Id",
+                table: "UserAuthorizations",
                 column: "Id",
                 unique: true);
 
