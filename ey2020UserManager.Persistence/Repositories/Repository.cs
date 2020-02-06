@@ -32,7 +32,12 @@ namespace ey2020UserManager.Persistence.Repositories
 			return item.FirstOrDefault(predicate);
 		}
 
-		public IEnumerable<T> GetAll() => _dbContext.Set<T>().AsNoTracking();
+		public (IEnumerable<T> items, int total) GetAll(int page = 0, int size = 10)
+		{
+			var items = _dbContext.Set<T>().AsNoTracking();
+
+			return (items.Skip(page * size).Take(size), items.Count());
+		}
 
 		public async Task<T> AddNewAsync(T entity)
 		{

@@ -10,7 +10,7 @@ namespace ey2020UserManager.Persistence.Repositories
 		where T: class, new()
 	{
 		Task<T> GetByIdAsync(int id);
-		IEnumerable<T> GetAll();
+		(IEnumerable<T> items, int total) GetAll(int page = 1, int size = 10);
 		T GetByPredicate(Func<T, bool> predicate, string[] includes);
 		Task<T> AddNewAsync(T entity);
 		Task<T> UpdateAsync(T entity);

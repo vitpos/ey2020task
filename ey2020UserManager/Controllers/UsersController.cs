@@ -30,10 +30,19 @@ namespace ey2020UserManager.API.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult<UserDto> GetAllUsers()
+		public ActionResult<PaginationDto<UserDto>> GetAllUsers(int page = 0, int size = 10)
 		{
-			var users = _userService.GetAllUser();
-			return Ok(_mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users));
+			var (items, total) = _userService.GetAllUser(page, size);
+
+			var response = new PaginationDto<UserDto>()
+			{
+				Page = page + 1,
+				Size = size,
+				Total = total,
+				Data = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(items)
+			};
+
+			return Ok(response);
 		}
 
 		[HttpGet]
